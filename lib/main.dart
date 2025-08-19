@@ -22,6 +22,7 @@ class MyApp extends StatelessWidget {
           titleTextStyle: const TextStyle(
             fontSize: 22,
             fontWeight: FontWeight.bold,
+            fontFamily: 'Nunito Sans',
             color: Colors.white,
           ),
           iconTheme: const IconThemeData(color: Colors.white, size: 40.0),
@@ -37,6 +38,7 @@ class MyApp extends StatelessWidget {
             textStyle: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
+              fontFamily: 'Nunito Sans',
               color: Colors.white,
             ),
           ),
