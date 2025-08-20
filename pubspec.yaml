@@ -79,7 +79,7 @@ flutter:
     - family: Nunito Sans
       fonts:
         - asset: fonts/NunitoSans-VariableFont_YTLC,opsz,wdth,wght.ttf
-          weight: 500
+          weight: 700
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
   #   - family: Trajan Pro

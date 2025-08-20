@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:helper_module/constants/app_colors.dart';
 import 'package:helper_module/screens/EditHelper.dart';
+
 class HelperDetails extends StatefulWidget {
   const HelperDetails({super.key});
 
@@ -27,11 +28,25 @@ class _HelperDetailsState extends State<HelperDetails> {
             child: ListView(
               padding: const EdgeInsets.all(16.0),
               children: [
-                const CircleAvatar(
-                  radius: 80.0,
-                  backgroundImage: AssetImage('assets/images/profile.avif'),
+                Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    CircleAvatar(
+                      radius: 80,
+                      backgroundImage: AssetImage("assets/images/profile.avif"),
+                    ),
+
+                    Positioned(
+                      bottom: 10,
+                      right: 120,
+                      child: CircleAvatar(
+                        radius: 20,
+                        backgroundImage: AssetImage("assets/images/profile2.webp"),
+                      ),
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 10),
+                SizedBox(height: 10),
                 const Text(
                   'Name',
                   textAlign: TextAlign.center,
@@ -46,119 +61,155 @@ class _HelperDetailsState extends State<HelperDetails> {
                 ListTile(
                   leading: const Text(
                     'Employee ID',
-                    style:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 15.0),
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15.0,
+                    ),
                   ),
                   trailing: Text(
                     'view',
                     style: TextStyle(
-                        color: AppColors.neonblue,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15.0),
+                      color: AppColors.neonblue,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15.0,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 20.0),
                 const ListTile(
                   leading: Text(
                     'Employee code',
-                    style:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 15.0),
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15.0,
+                    ),
                   ),
                   trailing: Text(
                     '46542',
-                    style:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 15.0),
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15.0,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 20.0),
                 const ListTile(
                   leading: Text(
                     'Gender',
-                    style:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 15.0),
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15.0,
+                    ),
                   ),
                   trailing: Text(
                     'Male',
-                    style:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 15.0),
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15.0,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 20.0),
                 const ListTile(
                   leading: Text(
                     'Organization',
-                    style:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 15.0),
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15.0,
+                    ),
                   ),
                   trailing: Text(
                     'Spring Helpers',
-                    style:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 15.0),
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15.0,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 20.0),
                 const ListTile(
                   leading: Text(
                     'Language(s)',
-                    style:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 15.0),
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15.0,
+                    ),
                   ),
                   trailing: Text(
                     'English, Hindi',
-                    style:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 15.0),
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15.0,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 20.0),
                 const ListTile(
                   leading: Text(
                     'Phone Number',
-                    style:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 15.0),
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15.0,
+                    ),
                   ),
                   trailing: Text(
                     '9876765456',
-                    style:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 15.0),
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15.0,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 20.0),
                 const ListTile(
                   leading: Text(
                     'Email',
-                    style:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 15.0),
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15.0,
+                    ),
                   ),
                   trailing: Text(
                     'NA',
-                    style:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 15.0),
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15.0,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 20.0),
                 const ListTile(
                   leading: Text(
                     'Vehicle Number',
-                    style:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 15.0),
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15.0,
+                    ),
                   ),
                   trailing: Text(
                     'TS37AV4577',
-                    style:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 15.0),
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15.0,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 20.0),
                 const ListTile(
                   leading: Text(
                     'KYC Document',
-                    style:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 15.0),
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15.0,
+                    ),
                   ),
                   trailing: Text(
                     'view',
-                    style:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 15.0),
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15.0,
+                      color: AppColors.neonblue,
+                    ),
                   ),
                 ),
               ],

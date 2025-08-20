@@ -2,6 +2,7 @@
 import 'dart:io';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:helper_module/screens/HelperList.dart';
+import 'package:helper_module/screens/KYCDocument.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:helper_module/constants/app_colors.dart';
@@ -72,7 +73,7 @@ class _AddHelperState extends State<AddHelper> {
                             color: AppColors.accent,
                             shape: BoxShape.circle,
                           ),
-                          
+
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -198,6 +199,25 @@ class _AddHelperState extends State<AddHelper> {
                           child: TextFormField(
                             validator: (value) {
                               if (value == null || value.isEmpty) {
+                                return 'select atleast 1, max 3';
+                              } else {
+                                return null;
+                              }
+                            },
+                            decoration: InputDecoration(
+                              labelText: 'Languages',
+                              border: OutlineInputBorder(),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 10.0,
+                            horizontal: 30.0,
+                          ),
+                          child: TextFormField(
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
                                 return 'Enter Phone number';
                               } else {
                                 return null;
@@ -218,7 +238,7 @@ class _AddHelperState extends State<AddHelper> {
                             child: TextFormField(
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
-                                  return 'Enter organization';
+                                  return 'Enter Email';
                                 } else {
                                   return null;
                                 }
@@ -226,6 +246,56 @@ class _AddHelperState extends State<AddHelper> {
                               decoration: InputDecoration(
                                 border: OutlineInputBorder(),
                                 labelText: 'Email',
+                              ),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 10.0,
+                            horizontal: 30.0,
+                          ),
+                          child: TextFormField(
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Enter Vehicle Number';
+                              } else {
+                                return null;
+                              }
+                            },
+                            decoration: InputDecoration(
+                              labelText: 'Vehicle Number',
+                              border: OutlineInputBorder(),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: ListTile(
+                            leading: Text(
+                              'KYC Document',
+                              style: TextStyle(
+                                fontSize: 15.0,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'Nunito Sans',
+                                color : Colors.black,
+                              ),
+                            ),
+                            trailing: ElevatedButton(
+                              onPressed: () {
+                                Navigator.push(context, MaterialPageRoute(builder: (context)=> KYCDocument()));
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: null,
+                                foregroundColor: Colors.black,
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(Icons.add, size: 20.0),
+                                  SizedBox(width: 8.0),
+                                  Text('Add Document', style : TextStyle(fontFamily: 'Nunito Sans', fontWeight: FontWeight.bold)),
+                                ],
                               ),
                             ),
                           ),
