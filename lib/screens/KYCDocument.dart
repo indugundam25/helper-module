@@ -1,6 +1,7 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:helper_module/constants/app_colors.dart';
+import 'package:helper_module/screens/AddHelper.dart';
 
 class KYCDocument extends StatefulWidget {
   const KYCDocument({super.key});
@@ -16,7 +17,61 @@ class _KYCDocumentState extends State<KYCDocument> {
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {
-            Navigator.pop(context);
+            // Navigator.pop(context);
+            showModalBottomSheet(
+              context: context,
+              builder: (BuildContext context) {
+                return Container(
+                  height: 300,
+                  child: Center(
+                    child: Column(
+                      children: [
+                        SizedBox(height: 20.0,),
+                        Icon(Icons.warning_amber, size : 50.0,color: Colors.amber[700]),
+                        SizedBox(height: 10.0,),
+                        Text('Discard changes?', style: TextStyle(fontSize: 20.0),),
+                        Text(
+                          'Going back without saving will not keep the changes.',
+                        ),
+                        SizedBox(height: 50.0),
+                        Row(
+                          children: [
+                            SizedBox(width: 50.0,),
+                            Padding(
+                              padding: const EdgeInsets.all(20.0),
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.white,
+                                ),
+                                child: Text(
+                                  'Cancel',
+                                  style: TextStyle(color: Colors.black),
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(20.0),
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  Navigator.push(context, MaterialPageRoute(builder: (context)=> AddHelper()));
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.amber[700],
+                                ),
+                                child: Text('Discard', style: TextStyle(color: Colors.white),),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            );
           },
           icon: const Icon(Icons.chevron_left),
         ),
@@ -82,8 +137,8 @@ class _KYCDocumentState extends State<KYCDocument> {
               ),
               child: Row(
                 children: [
-                  SizedBox(width: 100.0,),
-                  Icon(Icons.save, size: 20.0, color: Colors.white,),
+                  SizedBox(width: 100.0),
+                  Icon(Icons.save, size: 20.0, color: Colors.white),
                   SizedBox(width: 10.0),
                   Text('Save KYC', style: TextStyle(color: Colors.white)),
                 ],

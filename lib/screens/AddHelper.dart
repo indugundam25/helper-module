@@ -33,6 +33,7 @@ class _AddHelperState extends State<AddHelper> {
     }
 
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
           leading: IconButton(
@@ -60,34 +61,47 @@ class _AddHelperState extends State<AddHelper> {
                   Padding(
                     padding: const EdgeInsets.all(18.0),
                     child: Center(
-                      child: DottedBorder(
-                        color: AppColors.neonblue,
-                        strokeWidth: 2,
-                        dashPattern: [6, 3],
-                        borderType: BorderType.RRect,
-                        radius: const Radius.circular(200.0),
-                        child: Container(
-                          height: 150,
-                          width: 150,
-                          decoration: BoxDecoration(
-                            color: AppColors.accent,
-                            shape: BoxShape.circle,
-                          ),
-
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.camera_alt_outlined,
-                                color: AppColors.neonblue,
-                                size: 50.0,
-                              ),
-                              SizedBox(height: 10.0),
-                              Text(
-                                'Take Photo',
-                                style: TextStyle(color: AppColors.neonblue),
-                              ),
-                            ],
+                      child: GestureDetector(
+                        onTap: pickImage,
+                        child: DottedBorder(
+                          color: AppColors.neonblue,
+                          strokeWidth: 2,
+                          dashPattern: const [6, 3],
+                          borderType: BorderType.Circle,
+                          child: Container(
+                            height: 150,
+                            width: 150,
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: AppColors.accent,
+                            ),
+                            child: imageFile != null
+                                ? ClipOval(
+                                    child: Image.file(
+                                      imageFile!,
+                                      fit: BoxFit.cover,
+                                      height: 150,
+                                      width: 150,
+                                    ),
+                                  )
+                                : Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: const [
+                                      Icon(
+                                        Icons.camera_alt_outlined,
+                                        size: 40.0,
+                                        color: AppColors.neonblue,
+                                      ),
+                                      SizedBox(height: 8.0),
+                                      Text(
+                                        'Take Photo',
+                                        style: TextStyle(
+                                          color: AppColors.neonblue,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                           ),
                         ),
                       ),
@@ -155,40 +169,41 @@ class _AddHelperState extends State<AddHelper> {
                             ),
                           ),
                         ),
-                        ListTile(
-                          title: const Text("Male"),
-                          leading: Radio<String>(
-                            value: "Male",
-                            groupValue: selectedValue,
-                            onChanged: (value) {
-                              setState(() {
-                                selectedValue = value!;
-                              });
-                            },
-                          ),
-                        ),
-                        ListTile(
-                          title: const Text("Female"),
-                          leading: Radio<String>(
-                            value: "Female",
-                            groupValue: selectedValue,
-                            onChanged: (value) {
-                              setState(() {
-                                selectedValue = value!;
-                              });
-                            },
-                          ),
-                        ),
-                        ListTile(
-                          title: const Text("Other"),
-                          leading: Radio<String>(
-                            value: "Other",
-                            groupValue: selectedValue,
-                            onChanged: (value) {
-                              setState(() {
-                                selectedValue = value!;
-                              });
-                            },
+                        Padding(
+                          padding: const EdgeInsets.all(15.0),
+                          child: Row(
+                            children: [
+                              Radio<String>(
+                                value: "Male",
+                                groupValue: selectedValue,
+                                onChanged: (value) {
+                                  setState(() {
+                                    selectedValue = value!;
+                                  });
+                                },
+                              ),
+                              Text("Male"),
+                              Radio<String>(
+                                value: "Female",
+                                groupValue: selectedValue,
+                                onChanged: (value) {
+                                  setState(() {
+                                    selectedValue = value!;
+                                  });
+                                },
+                              ),
+                              Text("Female"),
+                              Radio<String>(
+                                value: "Other",
+                                groupValue: selectedValue,
+                                onChanged: (value) {
+                                  setState(() {
+                                    selectedValue = value!;
+                                  });
+                                },
+                              ),
+                              Text("Other"),
+                            ],
                           ),
                         ),
                         Padding(
@@ -278,12 +293,17 @@ class _AddHelperState extends State<AddHelper> {
                                 fontSize: 15.0,
                                 fontWeight: FontWeight.bold,
                                 fontFamily: 'Nunito Sans',
-                                color : Colors.black,
+                                color: Colors.black,
                               ),
                             ),
                             trailing: ElevatedButton(
                               onPressed: () {
-                                Navigator.push(context, MaterialPageRoute(builder: (context)=> KYCDocument()));
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => KYCDocument(),
+                                  ),
+                                );
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: null,
@@ -294,7 +314,13 @@ class _AddHelperState extends State<AddHelper> {
                                 children: [
                                   Icon(Icons.add, size: 20.0),
                                   SizedBox(width: 8.0),
-                                  Text('Add Document', style : TextStyle(fontFamily: 'Nunito Sans', fontWeight: FontWeight.bold)),
+                                  Text(
+                                    'Add Document',
+                                    style: TextStyle(
+                                      fontFamily: 'Nunito Sans',
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
                                 ],
                               ),
                             ),
