@@ -3,14 +3,21 @@ import 'package:flutter/material.dart';
 import 'package:helper_module/constants/app_colors.dart';
 import 'package:helper_module/screens/EditHelper.dart';
 
+// ignore: must_be_immutable
 class HelperDetails extends StatefulWidget {
-  const HelperDetails({super.key});
+  String? name;
+  String? role;
+  HelperDetails({super.key, required this.name, required this.role});
 
   @override
-  State<HelperDetails> createState() => _HelperDetailsState();
+  // ignore: no_logic_in_create_state
+  State<HelperDetails> createState() => _HelperDetailsState(name : name, role : role);
 }
 
 class _HelperDetailsState extends State<HelperDetails> {
+  String? name;
+  String? role;
+  _HelperDetailsState({required this.name, required this.role});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,13 +54,12 @@ class _HelperDetailsState extends State<HelperDetails> {
                   ],
                 ),
                 SizedBox(height: 10),
-                const Text(
-                  'Name',
+                Text(name ?? 'No name',
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
                 ),
-                const Text(
-                  'Role',
+                Text(
+                  role ?? 'No role',
                   textAlign: TextAlign.center,
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15.0),
                 ),

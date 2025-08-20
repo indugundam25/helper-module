@@ -1,8 +1,10 @@
 // ignore: file_names
+import 'dart:async';
 import 'dart:io';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:helper_module/screens/HelperList.dart';
 import 'package:helper_module/screens/KYCDocument.dart';
+import 'package:helper_module/screens/ServiceTypes.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:helper_module/constants/app_colors.dart';
@@ -38,7 +40,7 @@ class _AddHelperState extends State<AddHelper> {
         appBar: AppBar(
           leading: IconButton(
             onPressed: () {
-              Navigator.pop(context);
+              Navigator.push(context, MaterialPageRoute(builder: (context)=> HelperList()));
             },
             icon: Icon(Icons.chevron_left, color: Colors.white, size: 40.0),
           ),
@@ -117,17 +119,22 @@ class _AddHelperState extends State<AddHelper> {
                             vertical: 10.0,
                             horizontal: 30.0,
                           ),
-                          child: TextFormField(
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Enter service';
-                              } else {
-                                return null;
-                              }
-                            },
-                            decoration: InputDecoration(
-                              labelText: 'Type of service',
-                              border: OutlineInputBorder(),
+                          child: GestureDetector(
+                            child: TextFormField(
+                              onTap: () {
+                                Navigator.push(context, MaterialPageRoute(builder: (context)=> ServiceTypes()));
+                              },
+                              // validator: (value) {
+                              //   if (value == null || value.isEmpty) {
+                              //     return 'Enter service';
+                              //   } else {
+                              //     return null;
+                              //   }
+                              // },
+                              decoration: InputDecoration(
+                                labelText: 'Type of service',
+                                border: OutlineInputBorder(),
+                              ),
                             ),
                           ),
                         ),
@@ -137,13 +144,13 @@ class _AddHelperState extends State<AddHelper> {
                             horizontal: 30.0,
                           ),
                           child: TextFormField(
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Enter organization';
-                              } else {
-                                return null;
-                              }
-                            },
+                            // validator: (value) {
+                            //   if (value == null || value.isEmpty) {
+                            //     return 'Enter organization';
+                            //   } else {
+                            //     return null;
+                            //   }
+                            // },
                             decoration: InputDecoration(
                               labelText: 'Organization',
                               border: OutlineInputBorder(),
@@ -156,13 +163,13 @@ class _AddHelperState extends State<AddHelper> {
                             horizontal: 30.0,
                           ),
                           child: TextFormField(
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Enter name';
-                              } else {
-                                return null;
-                              }
-                            },
+                            // validator: (value) {
+                            //   if (value == null || value.isEmpty) {
+                            //     return 'Enter name';
+                            //   } else {
+                            //     return null;
+                            //   }
+                            // },
                             decoration: InputDecoration(
                               labelText: 'Name',
                               border: OutlineInputBorder(),
@@ -212,13 +219,13 @@ class _AddHelperState extends State<AddHelper> {
                             horizontal: 30.0,
                           ),
                           child: TextFormField(
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'select atleast 1, max 3';
-                              } else {
-                                return null;
-                              }
-                            },
+                            // validator: (value) {
+                            //   if (value == null || value.isEmpty) {
+                            //     return 'select atleast 1, max 3';
+                            //   } else {
+                            //     return null;
+                            //   }
+                            // },
                             decoration: InputDecoration(
                               labelText: 'Languages',
                               border: OutlineInputBorder(),
@@ -231,13 +238,13 @@ class _AddHelperState extends State<AddHelper> {
                             horizontal: 30.0,
                           ),
                           child: TextFormField(
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Enter Phone number';
-                              } else {
-                                return null;
-                              }
-                            },
+                            // validator: (value) {
+                            //   if (value == null || value.isEmpty) {
+                            //     return 'Enter Phone number';
+                            //   } else {
+                            //     return null;
+                            //   }
+                            // },
                             decoration: InputDecoration(
                               labelText: 'Phone (Mobile)',
                               border: OutlineInputBorder(),
@@ -251,13 +258,13 @@ class _AddHelperState extends State<AddHelper> {
                           ),
                           child: SizedBox(
                             child: TextFormField(
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Enter Email';
-                                } else {
-                                  return null;
-                                }
-                              },
+                              // validator: (value) {
+                              //   if (value == null || value.isEmpty) {
+                              //     return 'Enter Email';
+                              //   } else {
+                              //     return null;
+                              //   }
+                              // },
                               decoration: InputDecoration(
                                 border: OutlineInputBorder(),
                                 labelText: 'Email',
@@ -271,13 +278,13 @@ class _AddHelperState extends State<AddHelper> {
                             horizontal: 30.0,
                           ),
                           child: TextFormField(
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Enter Vehicle Number';
-                              } else {
-                                return null;
-                              }
-                            },
+                            // validator: (value) {
+                            //   if (value == null || value.isEmpty) {
+                            //     return 'Enter Vehicle Number';
+                            //   } else {
+                            //     return null;
+                            //   }
+                            // },
                             decoration: InputDecoration(
                               labelText: 'Vehicle Number',
                               border: OutlineInputBorder(),
@@ -351,35 +358,53 @@ class _AddHelperState extends State<AddHelper> {
                     color: Colors.white,
                   ),
                 ),
-                onPressed: () {
+                onPressed: ()async {
                   if (helperkey.currentState!.validate()) {
-                    showDialog<String>(
-                      context: context,
-                      builder: (BuildContext content) => Dialog(
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text('Contact added successfully'),
-                              SizedBox(height: 20.0),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => HelperList(),
-                                    ),
-                                  );
-                                },
-                                child: Text('close'),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    );
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=> Scaffold(
+                      // debugShowCheckedModeBanner: false,
+                      body : Center(
+                        child : Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                          Icon(Icons.check_circle, color: AppColors.neonblue, size: 80.0,),
+                          SizedBox(height: 40.0,),
+                          Text('Helper added!', style: TextStyle(fontSize: 20.0, color: Colors.black, fontWeight: FontWeight.w900),),
+                        ],
+                        ),        
+                      )
+                    )));
+                    Timer(Duration(seconds: 2), () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=> HelperList()));
+                    });
+
+                    // showDialog<String>(
+                    //   context: context,
+                    //   builder: (BuildContext content) => Dialog(
+                    //     child: Padding(
+                    //       padding: const EdgeInsets.all(8.0),
+                    //       child: Column(
+                    //         mainAxisSize: MainAxisSize.min,
+                    //         mainAxisAlignment: MainAxisAlignment.center,
+                    //         children: [
+                    //           Text('Contact added successfully'),
+                    //           SizedBox(height: 20.0),
+                    //           TextButton(
+                    //             onPressed: () {
+                    //               Navigator.push(
+                    //                 context,
+                    //                 MaterialPageRoute(
+                    //                   builder: (context) => HelperList(),
+                    //                 ),
+                    //               );
+                    //             },
+                    //             child: Text('close'),
+                    //           ),
+                    //         ],
+                    //       ),
+                    //     ),
+                    //   ),
+                    // );
                   }
                 },
                 child: Row(

@@ -56,7 +56,7 @@ class _HelperListState extends State<HelperList> {
                 itemCount: helpers.length, 
                 separatorBuilder: (context, index) => const Divider(
                   height: 10.0,
-                  thickness: 0.5,
+                  thickness: 1.0,
                   color: Color(0xFFDEDEDE), 
                 ),
                 itemBuilder: (context, index) {
@@ -66,7 +66,7 @@ class _HelperListState extends State<HelperList> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const HelperDetails(),
+                          builder: (context) => HelperDetails(name : helper["name"], role : helper["role"]),
                         ),
                       );
                     },
