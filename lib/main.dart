@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:helper_module/constants/app_colors.dart';
 import 'package:helper_module/screens/HelperList.dart';
 
 void main() {
@@ -30,11 +31,11 @@ class MyApp extends StatelessWidget {
 
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.indigo[900],
+            backgroundColor: AppColors.primary,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
             ),
-            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 24),
             textStyle: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
