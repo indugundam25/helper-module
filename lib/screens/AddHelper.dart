@@ -72,6 +72,7 @@ class _AddHelperState extends State<AddHelper> {
                             color: AppColors.accent,
                             shape: BoxShape.circle,
                           ),
+                          
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
