@@ -23,7 +23,23 @@ class _AddHelperState extends State<AddHelper> {
     final helperkey = GlobalKey<FormState>();
     File? imageFile;
     final ImagePicker picker = ImagePicker();
-
+    bool selected = false;
+    List<String> orgs = [
+      'None',
+      'Sonic Services',
+      'InnCircles',
+      'Servico',
+      'Dr.House',
+    ];
+    List<String> languages = [
+      'English',
+      'Hindi',
+      'Kannada',
+      'Malayalam',
+      'Marathi',
+      'Tamil',
+      'Telugu',
+    ];
     Future<void> pickImage() async {
       final pickedFile = await picker.pickImage(source: ImageSource.camera);
 
@@ -40,7 +56,10 @@ class _AddHelperState extends State<AddHelper> {
         appBar: AppBar(
           leading: IconButton(
             onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context)=> HelperList()));
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => HelperList()),
+              );
             },
             icon: Icon(Icons.chevron_left, color: Colors.white, size: 40.0),
           ),
@@ -115,27 +134,10 @@ class _AddHelperState extends State<AddHelper> {
                       children: [
                         SizedBox(height: 20.0),
                         Padding(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 10.0,
-                            horizontal: 30.0,
-                          ),
-                          child: GestureDetector(
-                            child: TextFormField(
-                              onTap: () {
-                                Navigator.push(context, MaterialPageRoute(builder: (context)=> ServiceTypes()));
-                              },
-                              // validator: (value) {
-                              //   if (value == null || value.isEmpty) {
-                              //     return 'Enter service';
-                              //   } else {
-                              //     return null;
-                              //   }
-                              // },
-                              decoration: InputDecoration(
-                                labelText: 'Type of service',
-                                border: OutlineInputBorder(),
-                              ),
-                            ),
+                          padding: const EdgeInsets.fromLTRB(30.0, 5.0, 0.0, 0.0),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text('Type of Service'),
                           ),
                         ),
                         Padding(
@@ -143,18 +145,153 @@ class _AddHelperState extends State<AddHelper> {
                             vertical: 10.0,
                             horizontal: 30.0,
                           ),
+                          child: GestureDetector(
+                            child: TextFormField(
+                              readOnly: true,
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ServiceTypes(),
+                                  ),
+                                );
+                              },
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Enter service';
+                                } else {
+                                  return null;
+                                }
+                              },
+                              decoration: InputDecoration(
+                                hintText: 'Select type of service',
+                                suffixIcon: Icon(Icons.keyboard_arrow_down),
+                                border: OutlineInputBorder(),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(30.0, 5.0, 0.0, 0.0),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text('Organization'),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 10.0,
+                            horizontal: 30.0,
+                          ),
+                          
                           child: TextFormField(
                             // validator: (value) {
                             //   if (value == null || value.isEmpty) {
-                            //     return 'Enter organization';
+                            //     return 'Enter name';
                             //   } else {
                             //     return null;
                             //   }
                             // },
-                            decoration: InputDecoration(
-                              labelText: 'Organization',
+                            readOnly: true,
+                            onTap: () {
+                              showModalBottomSheet(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return SizedBox(
+                                    height: 450,
+                                    child: Column(
+                                      children: [
+                                        const Padding(
+                                          padding: EdgeInsets.all(12.0),
+                                          child: Text(
+                                            'Select Organization',
+                                            style: TextStyle(
+                                              fontSize: 22.0,
+                                              fontWeight: FontWeight.w900,
+                                            ),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: ListView.separated(
+                                            itemBuilder:
+                                                (
+                                                  BuildContext context,
+                                                  int index,
+                                                ) {
+                                                  final org = orgs[index];
+                                                  return ListTile(
+                                                    trailing: Icon(Icons.check_circle, color: AppColors.neonblue,),
+                                                    onTap: () {
+                                                      selected = true;
+                                                      Navigator.pop(
+                                                        context,
+                                                        org,
+                                                      );
+                                                      
+                                                    },
+                                                    title: Text(org),
+                                                  );
+                                                },
+                                            separatorBuilder:
+                                                (
+                                                  BuildContext context,
+                                                  int index,
+                                                ) => const Divider(
+                                                  height: 10.0,
+                                                  thickness: 1.0,
+                                                  color: Color(0xFFDEDEDE),
+                                                ),
+                                            itemCount: orgs.length,
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(20.0),
+                                          child: ElevatedButton(
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.fromLTRB(
+                                                    130,
+                                                    5,
+                                                    130,
+                                                    5,
+                                                  ),
+                                              child: Text(
+                                                'Done',
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              ).then((selectedOrg) {
+                                if (selectedOrg != null) {
+                                  setState(() {
+                                    // _orgController.text = selectedOrg;
+                                  });
+                                }
+                              });
+                            },
+                            // controller: _orgController, // controller for text field
+                            decoration: const InputDecoration(
+                              hintText: 'Organization',
+                              suffixIcon: Icon(Icons.keyboard_arrow_down),
                               border: OutlineInputBorder(),
                             ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(30.0, 5.0, 0.0, 0.0),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text('Name'),
                           ),
                         ),
                         Padding(
@@ -177,7 +314,14 @@ class _AddHelperState extends State<AddHelper> {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.all(15.0),
+                          padding: const EdgeInsets.fromLTRB(30.0, 0.0, 0.0, 0.0),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text('Gender'),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(20.0, 5.0, 5.0, 5.0),
                           child: Row(
                             children: [
                               Radio<String>(
@@ -214,6 +358,13 @@ class _AddHelperState extends State<AddHelper> {
                           ),
                         ),
                         Padding(
+                          padding: const EdgeInsets.fromLTRB(30.0, 5.0, 0.0, 0.0),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text('Languages'),
+                          ),
+                        ),
+                        Padding(
                           padding: const EdgeInsets.symmetric(
                             vertical: 10.0,
                             horizontal: 30.0,
@@ -226,10 +377,105 @@ class _AddHelperState extends State<AddHelper> {
                             //     return null;
                             //   }
                             // },
+                            readOnly: true,
+                            onTap: () {
+                              showModalBottomSheet(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return SizedBox(
+                                    height: 450,
+                                    child: Column(
+                                      children: [
+                                        const Padding(
+                                          padding: EdgeInsets.all(12.0),
+                                          child: Text(
+                                            'Languages',
+                                            style: TextStyle(
+                                              fontSize: 22.0,
+                                              fontWeight: FontWeight.w900,
+                                            ),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: ListView.separated(
+                                            itemBuilder:
+                                                (
+                                                  BuildContext context,
+                                                  int index,
+                                                ) {
+                                                  final language = languages[index];
+                                                  return ListTile(
+                                                    trailing: Icon(Icons.check_circle, color: AppColors.neonblue,),
+                                                    onTap: () {
+                                                      selected = true;
+                                                      Navigator.pop(
+                                                        context,
+                                                        language,
+                                                      );
+                                                      
+                                                    },
+                                                    title: Text(language),
+                                                  );
+                                                },
+                                            separatorBuilder:
+                                                (
+                                                  BuildContext context,
+                                                  int index,
+                                                ) => const Divider(
+                                                  height: 10.0,
+                                                  thickness: 1.0,
+                                                  color: Color(0xFFDEDEDE),
+                                                ),
+                                            itemCount: orgs.length,
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(20.0),
+                                          child: ElevatedButton(
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.fromLTRB(
+                                                    130,
+                                                    5,
+                                                    130,
+                                                    5,
+                                                  ),
+                                              child: Text(
+                                                'Done',
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              ).then((selectedOrg) {
+                                if (selectedOrg != null) {
+                                  setState(() {
+                                    // _orgController.text = selectedOrg;
+                                  });
+                                }
+                              });
+                            },
                             decoration: InputDecoration(
-                              labelText: 'Languages',
+                              hintText: 'Languages',
+                              suffixIcon: Icon(Icons.keyboard_arrow_down),
                               border: OutlineInputBorder(),
                             ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(30.0, 5.0, 0.0, 0.0),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text('Phone Number'),
                           ),
                         ),
                         Padding(
@@ -252,6 +498,13 @@ class _AddHelperState extends State<AddHelper> {
                           ),
                         ),
                         Padding(
+                          padding: const EdgeInsets.fromLTRB(30.0, 5.0, 0.0, 0.0),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text('Email'),
+                          ),
+                        ),
+                        Padding(
                           padding: const EdgeInsets.symmetric(
                             vertical: 10.0,
                             horizontal: 30.0,
@@ -270,6 +523,13 @@ class _AddHelperState extends State<AddHelper> {
                                 labelText: 'Email',
                               ),
                             ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(30.0, 5.0, 0.0, 0.0),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text('Vehicle Number'),
                           ),
                         ),
                         Padding(
@@ -358,24 +618,43 @@ class _AddHelperState extends State<AddHelper> {
                     color: Colors.white,
                   ),
                 ),
-                onPressed: ()async {
+                onPressed: () async {
                   if (helperkey.currentState!.validate()) {
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=> Scaffold(
-                      // debugShowCheckedModeBanner: false,
-                      body : Center(
-                        child : Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                          Icon(Icons.check_circle, color: AppColors.neonblue, size: 80.0,),
-                          SizedBox(height: 40.0,),
-                          Text('Helper added!', style: TextStyle(fontSize: 20.0, color: Colors.black, fontWeight: FontWeight.w900),),
-                        ],
-                        ),        
-                      )
-                    )));
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => Scaffold(
+                          // debugShowCheckedModeBanner: false,
+                          body: Center(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.check_circle,
+                                  color: AppColors.neonblue,
+                                  size: 80.0,
+                                ),
+                                SizedBox(height: 40.0),
+                                Text(
+                                  'Helper added!',
+                                  style: TextStyle(
+                                    fontSize: 20.0,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w900,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
                     Timer(Duration(seconds: 2), () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=> HelperList()));
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => HelperList()),
+                      );
                     });
 
                     // showDialog<String>(
