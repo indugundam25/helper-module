@@ -24,8 +24,10 @@ enum Genders { Male, Female, Other }
 class _AddHelperState extends State<AddHelper> {
   Genders _gender = Genders.Male;
   String service = '';
-  String selectedOrg = '';
+  String selectedOrg = 'Inncircles';
   List<String> selectedLangs = [];
+  File? imageFile;
+  final ImagePicker picker = ImagePicker();
   @override
   void initState() {
     super.initState();
@@ -35,8 +37,6 @@ class _AddHelperState extends State<AddHelper> {
   @override
   Widget build(BuildContext context) {
     final helperkey = GlobalKey<FormState>();
-    File? imageFile;
-    final ImagePicker picker = ImagePicker();
     List<String> orgs = [
       'None',
       'Sonic Services',
@@ -109,16 +109,8 @@ class _AddHelperState extends State<AddHelper> {
                               shape: BoxShape.circle,
                               color: AppColors.accent,
                             ),
-                            child: imageFile != null
-                                ? ClipOval(
-                                    child: Image.file(
-                                      imageFile!,
-                                      fit: BoxFit.cover,
-                                      height: 150,
-                                      width: 150,
-                                    ),
-                                  )
-                                : Column(
+                            child: imageFile == null
+                                ? Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: const [
                                       Icon(
@@ -135,6 +127,14 @@ class _AddHelperState extends State<AddHelper> {
                                         ),
                                       ),
                                     ],
+                                  )
+                                : ClipOval(
+                                    child: Image.file(
+                                      imageFile!,
+                                      height: 150,
+                                      width: 150,
+                                      fit: BoxFit.cover,
+                                    ),
                                   ),
                           ),
                         ),
@@ -524,7 +524,9 @@ class _AddHelperState extends State<AddHelper> {
                               ).then((selected) {
                                 if (selected != null) {
                                   setState(() {
-                                    selectedLangs = List<String>.from(selected);
+                                    selectedLangs = List<String>.from(
+                                      selected,
+                                    ); //selected contains templangs
                                   });
                                 }
                               });
@@ -568,6 +570,7 @@ class _AddHelperState extends State<AddHelper> {
                               labelText: 'Phone (Mobile)',
                               border: OutlineInputBorder(),
                             ),
+                            keyboardType: TextInputType.number,
                           ),
                         ),
                         Padding(
