@@ -85,6 +85,7 @@ class _HelperListState extends State<HelperList> {
                       helper["role"]!,
                       style: const TextStyle(
                         fontSize: 15,
+                        fontWeight: FontWeight.bold,
                         color: Colors.grey,
                       ),
                     ),
@@ -113,7 +114,7 @@ class _HelperListState extends State<HelperList> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const AddHelper()),
+                  MaterialPageRoute(builder: (context) => AddHelper( service: '',)),
                 );
               },
               child: Row(

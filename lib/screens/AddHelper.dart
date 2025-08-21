@@ -10,20 +10,33 @@ import 'package:flutter/material.dart';
 import 'package:helper_module/constants/app_colors.dart';
 
 class AddHelper extends StatefulWidget {
-  const AddHelper({super.key});
+  final String service;
+  const AddHelper({super.key, required this.service});
 
   @override
+  // ignore: no_logic_in_create_state
   State<AddHelper> createState() => _AddHelperState();
 }
 
+// ignore: constant_identifier_names
+enum Genders { Male, Female, Other }
+
 class _AddHelperState extends State<AddHelper> {
+  Genders _gender = Genders.Male;
+  String service = '';
+  String selectedOrg = '';
+  List<String> selectedLangs = [];
+  @override
+  void initState() {
+    super.initState();
+    service = widget.service;
+  }
+
   @override
   Widget build(BuildContext context) {
-    String selectedValue = "Male";
     final helperkey = GlobalKey<FormState>();
     File? imageFile;
     final ImagePicker picker = ImagePicker();
-    bool selected = false;
     List<String> orgs = [
       'None',
       'Sonic Services',
@@ -134,7 +147,12 @@ class _AddHelperState extends State<AddHelper> {
                       children: [
                         SizedBox(height: 20.0),
                         Padding(
-                          padding: const EdgeInsets.fromLTRB(30.0, 5.0, 0.0, 0.0),
+                          padding: const EdgeInsets.fromLTRB(
+                            30.0,
+                            5.0,
+                            0.0,
+                            0.0,
+                          ),
                           child: Align(
                             alignment: Alignment.centerLeft,
                             child: Text('Type of Service'),
@@ -156,15 +174,17 @@ class _AddHelperState extends State<AddHelper> {
                                   ),
                                 );
                               },
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Enter service';
-                                } else {
-                                  return null;
-                                }
-                              },
+                              // validator: (value) {
+                              //   if (value == null || value.isEmpty) {
+                              //     return 'Enter service';
+                              //   } else {
+                              //     return null;
+                              //   }
+                              // },
                               decoration: InputDecoration(
-                                hintText: 'Select type of service',
+                                hintText: (service != '')
+                                    ? service
+                                    : 'Select type of service',
                                 suffixIcon: Icon(Icons.keyboard_arrow_down),
                                 border: OutlineInputBorder(),
                               ),
@@ -172,7 +192,12 @@ class _AddHelperState extends State<AddHelper> {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.fromLTRB(30.0, 5.0, 0.0, 0.0),
+                          padding: const EdgeInsets.fromLTRB(
+                            30.0,
+                            5.0,
+                            0.0,
+                            0.0,
+                          ),
                           child: Align(
                             alignment: Alignment.centerLeft,
                             child: Text('Organization'),
@@ -183,7 +208,7 @@ class _AddHelperState extends State<AddHelper> {
                             vertical: 10.0,
                             horizontal: 30.0,
                           ),
-                          
+
                           child: TextFormField(
                             // validator: (value) {
                             //   if (value == null || value.isEmpty) {
@@ -194,101 +219,110 @@ class _AddHelperState extends State<AddHelper> {
                             // },
                             readOnly: true,
                             onTap: () {
-                              showModalBottomSheet(
+                              showModalBottomSheet<String>(
                                 context: context,
+                                // isScrollControlled: true,
                                 builder: (BuildContext context) {
-                                  return SizedBox(
-                                    height: 450,
-                                    child: Column(
-                                      children: [
-                                        const Padding(
-                                          padding: EdgeInsets.all(12.0),
-                                          child: Text(
-                                            'Select Organization',
-                                            style: TextStyle(
-                                              fontSize: 22.0,
-                                              fontWeight: FontWeight.w900,
-                                            ),
-                                          ),
-                                        ),
-                                        Expanded(
-                                          child: ListView.separated(
-                                            itemBuilder:
-                                                (
-                                                  BuildContext context,
-                                                  int index,
-                                                ) {
-                                                  final org = orgs[index];
-                                                  return ListTile(
-                                                    trailing: Icon(Icons.check_circle, color: AppColors.neonblue,),
-                                                    onTap: () {
-                                                      selected = true;
-                                                      Navigator.pop(
-                                                        context,
-                                                        org,
-                                                      );
-                                                      
-                                                    },
-                                                    title: Text(org),
-                                                  );
-                                                },
-                                            separatorBuilder:
-                                                (
-                                                  BuildContext context,
-                                                  int index,
-                                                ) => const Divider(
-                                                  height: 10.0,
-                                                  thickness: 1.0,
-                                                  color: Color(0xFFDEDEDE),
-                                                ),
-                                            itemCount: orgs.length,
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.all(20.0),
-                                          child: ElevatedButton(
-                                            onPressed: () {
-                                              Navigator.pop(context);
-                                            },
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.fromLTRB(
-                                                    130,
-                                                    5,
-                                                    130,
-                                                    5,
-                                                  ),
+                                  String tempOrg = selectedOrg;
+                                  return StatefulBuilder(
+                                    builder: (context, setModalState) {
+                                      return SizedBox(
+                                        height: 450,
+                                        child: Column(
+                                          children: [
+                                            const Padding(
+                                              padding: EdgeInsets.all(12.0),
                                               child: Text(
-                                                'Done',
+                                                'Select Organization',
                                                 style: TextStyle(
-                                                  color: Colors.white,
+                                                  fontSize: 22.0,
+                                                  fontWeight: FontWeight.w900,
                                                 ),
                                               ),
                                             ),
-                                          ),
+                                            Expanded(
+                                              child: ListView.separated(
+                                                itemBuilder: (context, index) {
+                                                  final org = orgs[index];
+                                                  return ListTile(
+                                                    title: Text(org),
+                                                    trailing: tempOrg == org
+                                                        ? const Icon(
+                                                            Icons.check_circle,
+                                                            color: AppColors
+                                                                .neonblue,
+                                                          )
+                                                        : null,
+                                                    onTap: () {
+                                                      setModalState(() {
+                                                        tempOrg = org;
+                                                      });
+                                                    },
+                                                  );
+                                                },
+                                                separatorBuilder:
+                                                    (context, index) =>
+                                                        const Divider(
+                                                          height: 10.0,
+                                                          thickness: 1.0,
+                                                          color: Color(
+                                                            0xFFDEDEDE,
+                                                          ),
+                                                        ),
+                                                itemCount: orgs.length,
+                                              ),
+                                            ),
+                                            ElevatedButton(
+                                              onPressed: () {
+                                                Navigator.pop(context, tempOrg);
+                                              },
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.fromLTRB(
+                                                      130,
+                                                      0,
+                                                      130,
+                                                      0,
+                                                    ),
+                                                child: Text(
+                                                  'Done',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                      ],
-                                    ),
+                                      );
+                                    },
                                   );
                                 },
-                              ).then((selectedOrg) {
-                                if (selectedOrg != null) {
+                              ).then((selected) {
+                                if (selected != null) {
                                   setState(() {
-                                    // _orgController.text = selectedOrg;
+                                    selectedOrg = selected;
                                   });
                                 }
                               });
                             },
-                            // controller: _orgController, // controller for text field
-                            decoration: const InputDecoration(
-                              hintText: 'Organization',
-                              suffixIcon: Icon(Icons.keyboard_arrow_down),
-                              border: OutlineInputBorder(),
+                            decoration: InputDecoration(
+                              hintText: selectedOrg.isNotEmpty
+                                  ? selectedOrg
+                                  : 'Organization',
+                              suffixIcon: const Icon(Icons.keyboard_arrow_down),
+                              border: const OutlineInputBorder(),
                             ),
                           ),
                         ),
+
                         Padding(
-                          padding: const EdgeInsets.fromLTRB(30.0, 5.0, 0.0, 0.0),
+                          padding: const EdgeInsets.fromLTRB(
+                            30.0,
+                            5.0,
+                            0.0,
+                            0.0,
+                          ),
                           child: Align(
                             alignment: Alignment.centerLeft,
                             child: Text('Name'),
@@ -314,42 +348,52 @@ class _AddHelperState extends State<AddHelper> {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.fromLTRB(30.0, 0.0, 0.0, 0.0),
+                          padding: const EdgeInsets.fromLTRB(
+                            30.0,
+                            0.0,
+                            0.0,
+                            0.0,
+                          ),
                           child: Align(
                             alignment: Alignment.centerLeft,
                             child: Text('Gender'),
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.fromLTRB(20.0, 5.0, 5.0, 5.0),
+                          padding: const EdgeInsets.fromLTRB(
+                            20.0,
+                            5.0,
+                            5.0,
+                            5.0,
+                          ),
                           child: Row(
                             children: [
-                              Radio<String>(
-                                value: "Male",
-                                groupValue: selectedValue,
-                                onChanged: (value) {
+                              Radio<Genders>(
+                                value: Genders.Male,
+                                groupValue: _gender,
+                                onChanged: (Genders? value) {
                                   setState(() {
-                                    selectedValue = value!;
+                                    _gender = value!;
                                   });
                                 },
                               ),
                               Text("Male"),
-                              Radio<String>(
-                                value: "Female",
-                                groupValue: selectedValue,
-                                onChanged: (value) {
+                              Radio<Genders>(
+                                value: Genders.Female,
+                                groupValue: _gender,
+                                onChanged: (Genders? value) {
                                   setState(() {
-                                    selectedValue = value!;
+                                    _gender = value!;
                                   });
                                 },
                               ),
                               Text("Female"),
-                              Radio<String>(
-                                value: "Other",
-                                groupValue: selectedValue,
-                                onChanged: (value) {
+                              Radio<Genders>(
+                                value: Genders.Other,
+                                groupValue: _gender,
+                                onChanged: (Genders? value) {
                                   setState(() {
-                                    selectedValue = value!;
+                                    _gender = value!;
                                   });
                                 },
                               ),
@@ -358,7 +402,12 @@ class _AddHelperState extends State<AddHelper> {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.fromLTRB(30.0, 5.0, 0.0, 0.0),
+                          padding: const EdgeInsets.fromLTRB(
+                            30.0,
+                            5.0,
+                            0.0,
+                            0.0,
+                          ),
                           child: Align(
                             alignment: Alignment.centerLeft,
                             child: Text('Languages'),
@@ -370,109 +419,133 @@ class _AddHelperState extends State<AddHelper> {
                             horizontal: 30.0,
                           ),
                           child: TextFormField(
-                            // validator: (value) {
-                            //   if (value == null || value.isEmpty) {
-                            //     return 'select atleast 1, max 3';
-                            //   } else {
-                            //     return null;
-                            //   }
-                            // },
                             readOnly: true,
                             onTap: () {
                               showModalBottomSheet(
                                 context: context,
                                 builder: (BuildContext context) {
-                                  return SizedBox(
-                                    height: 450,
-                                    child: Column(
-                                      children: [
-                                        const Padding(
-                                          padding: EdgeInsets.all(12.0),
-                                          child: Text(
-                                            'Languages',
-                                            style: TextStyle(
-                                              fontSize: 22.0,
-                                              fontWeight: FontWeight.w900,
+                                  List<String> tempLangs = List.from(
+                                    selectedLangs,
+                                  );
+
+                                  return StatefulBuilder(
+                                    builder: (context, setModalState) {
+                                      return SizedBox(
+                                        height: 450,
+                                        child: Column(
+                                          children: [
+                                            const Padding(
+                                              padding: EdgeInsets.all(12.0),
+                                              child: Text(
+                                                'Languages',
+                                                style: TextStyle(
+                                                  fontSize: 22.0,
+                                                  fontWeight: FontWeight.w900,
+                                                ),
+                                              ),
                                             ),
-                                          ),
-                                        ),
-                                        Expanded(
-                                          child: ListView.separated(
-                                            itemBuilder:
-                                                (
-                                                  BuildContext context,
-                                                  int index,
-                                                ) {
-                                                  final language = languages[index];
+                                            Expanded(
+                                              child: ListView.separated(
+                                                itemCount: languages.length,
+                                                separatorBuilder:
+                                                    (context, index) =>
+                                                        const Divider(
+                                                          height: 10.0,
+                                                          thickness: 1.0,
+                                                          color: Color(
+                                                            0xFFDEDEDE,
+                                                          ),
+                                                        ),
+                                                itemBuilder: (context, index) {
+                                                  final lang = languages[index];
+                                                  final isSelected = tempLangs
+                                                      .contains(lang);
+
                                                   return ListTile(
-                                                    trailing: Icon(Icons.check_circle, color: AppColors.neonblue,),
+                                                    title: Text(lang),
+                                                    trailing: isSelected
+                                                        ? const Icon(
+                                                            Icons.check_circle,
+                                                            color: AppColors
+                                                                .neonblue,
+                                                          )
+                                                        : null,
                                                     onTap: () {
-                                                      selected = true;
-                                                      Navigator.pop(
-                                                        context,
-                                                        language,
-                                                      );
-                                                      
+                                                      setModalState(() {
+                                                        if (isSelected) {
+                                                          tempLangs.remove(
+                                                            lang,
+                                                          );
+                                                        } else {
+                                                          if (tempLangs.length <
+                                                              3) {
+                                                            tempLangs.add(lang);
+                                                          }
+                                                        }
+                                                      });
                                                     },
-                                                    title: Text(language),
                                                   );
                                                 },
-                                            separatorBuilder:
-                                                (
-                                                  BuildContext context,
-                                                  int index,
-                                                ) => const Divider(
-                                                  height: 10.0,
-                                                  thickness: 1.0,
-                                                  color: Color(0xFFDEDEDE),
-                                                ),
-                                            itemCount: orgs.length,
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.all(20.0),
-                                          child: ElevatedButton(
-                                            onPressed: () {
-                                              Navigator.pop(context);
-                                            },
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.fromLTRB(
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.all(
+                                                20.0,
+                                              ),
+                                              child: ElevatedButton(
+                                                onPressed: () {
+                                                  Navigator.pop(
+                                                    context,
+                                                    tempLangs,
+                                                  );
+                                                },
+                                                child: const Padding(
+                                                  padding: EdgeInsets.fromLTRB(
                                                     130,
                                                     5,
                                                     130,
                                                     5,
                                                   ),
-                                              child: Text(
-                                                'Done',
-                                                style: TextStyle(
-                                                  color: Colors.white,
+                                                  child: Text(
+                                                    'Done',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                    ),
+                                                  ),
                                                 ),
                                               ),
                                             ),
-                                          ),
+                                          ],
                                         ),
-                                      ],
-                                    ),
+                                      );
+                                    },
                                   );
                                 },
-                              ).then((selectedOrg) {
-                                if (selectedOrg != null) {
+                              ).then((selected) {
+                                if (selected != null) {
                                   setState(() {
-                                    // _orgController.text = selectedOrg;
+                                    selectedLangs = List<String>.from(selected);
                                   });
                                 }
                               });
                             },
                             decoration: InputDecoration(
-                              hintText: 'Languages',
-                              suffixIcon: Icon(Icons.keyboard_arrow_down),
-                              border: OutlineInputBorder(),
+                              hintText: selectedLangs.isNotEmpty
+                                  ? selectedLangs.join(", ")
+                                  : 'Select languages',
+                              suffixIcon: const Icon(Icons.keyboard_arrow_down),
+                              border: const OutlineInputBorder(),
                             ),
                           ),
                         ),
+
                         Padding(
-                          padding: const EdgeInsets.fromLTRB(30.0, 5.0, 0.0, 0.0),
+                          padding: const EdgeInsets.fromLTRB(
+                            30.0,
+                            5.0,
+                            0.0,
+                            0.0,
+                          ),
                           child: Align(
                             alignment: Alignment.centerLeft,
                             child: Text('Phone Number'),
@@ -498,7 +571,12 @@ class _AddHelperState extends State<AddHelper> {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.fromLTRB(30.0, 5.0, 0.0, 0.0),
+                          padding: const EdgeInsets.fromLTRB(
+                            30.0,
+                            5.0,
+                            0.0,
+                            0.0,
+                          ),
                           child: Align(
                             alignment: Alignment.centerLeft,
                             child: Text('Email'),
@@ -526,7 +604,12 @@ class _AddHelperState extends State<AddHelper> {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.fromLTRB(30.0, 5.0, 0.0, 0.0),
+                          padding: const EdgeInsets.fromLTRB(
+                            30.0,
+                            5.0,
+                            0.0,
+                            0.0,
+                          ),
                           child: Align(
                             alignment: Alignment.centerLeft,
                             child: Text('Vehicle Number'),
@@ -651,39 +734,12 @@ class _AddHelperState extends State<AddHelper> {
                       ),
                     );
                     Timer(Duration(seconds: 2), () {
+                      //callback
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => HelperList()),
                       );
                     });
-
-                    // showDialog<String>(
-                    //   context: context,
-                    //   builder: (BuildContext content) => Dialog(
-                    //     child: Padding(
-                    //       padding: const EdgeInsets.all(8.0),
-                    //       child: Column(
-                    //         mainAxisSize: MainAxisSize.min,
-                    //         mainAxisAlignment: MainAxisAlignment.center,
-                    //         children: [
-                    //           Text('Contact added successfully'),
-                    //           SizedBox(height: 20.0),
-                    //           TextButton(
-                    //             onPressed: () {
-                    //               Navigator.push(
-                    //                 context,
-                    //                 MaterialPageRoute(
-                    //                   builder: (context) => HelperList(),
-                    //                 ),
-                    //               );
-                    //             },
-                    //             child: Text('close'),
-                    //           ),
-                    //         ],
-                    //       ),
-                    //     ),
-                    //   ),
-                    // );
                   }
                 },
                 child: Row(

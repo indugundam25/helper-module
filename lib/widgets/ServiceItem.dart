@@ -11,15 +11,19 @@ class ServiceItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        CircleAvatar(
-          backgroundColor: AppColors.grey,
-          radius: 30.0,
-          child: Icon(
-            icon,
-            color: Colors.black,
-            size: 30.0,
+        Material(
+          color: Colors.transparent,
+          child: InkWell(
+            borderRadius: BorderRadius.circular(30),
+            onTap: () => Navigator.pop(context, label),
+            child: CircleAvatar(
+              backgroundColor: AppColors.grey,
+              radius: 30.0,
+              child: Icon(icon, color: Colors.black, size: 30.0),
+            ),
           ),
         ),
+
         Text(label),
       ],
     );

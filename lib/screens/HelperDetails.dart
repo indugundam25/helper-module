@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:helper_module/constants/app_colors.dart';
 import 'package:helper_module/screens/EditHelper.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 // ignore: must_be_immutable
 class HelperDetails extends StatefulWidget {
@@ -11,7 +12,9 @@ class HelperDetails extends StatefulWidget {
 
   @override
   // ignore: no_logic_in_create_state
-  State<HelperDetails> createState() => _HelperDetailsState(name : name, role : role);
+  State<HelperDetails> createState() =>
+      // ignore: no_logic_in_create_state
+      _HelperDetailsState(name: name, role: role);
 }
 
 class _HelperDetailsState extends State<HelperDetails> {
@@ -48,15 +51,21 @@ class _HelperDetailsState extends State<HelperDetails> {
                       right: 120,
                       child: CircleAvatar(
                         radius: 20,
-                        backgroundImage: AssetImage("assets/images/profile2.webp"),
+                        backgroundImage: AssetImage(
+                          "assets/images/profile2.webp",
+                        ),
                       ),
                     ),
                   ],
                 ),
                 SizedBox(height: 10),
-                Text(name ?? 'No name',
+                Text(
+                  name ?? 'No name',
                   textAlign: TextAlign.center,
-                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20.0,
+                  ),
                 ),
                 Text(
                   role ?? 'No role',
@@ -72,13 +81,23 @@ class _HelperDetailsState extends State<HelperDetails> {
                       fontSize: 15.0,
                     ),
                   ),
-                  trailing: Text(
-                    'view',
-                    style: TextStyle(
-                      color: AppColors.neonblue,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 15.0,
-                    ),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min, 
+                    children: [
+                      Icon(
+                        PhosphorIcons.eye(PhosphorIconsStyle.regular),
+                        color: AppColors.neonblue,
+                      ),
+                      SizedBox(width: 10.0),
+                      Text(
+                        'view',
+                        style: TextStyle(
+                          color: AppColors.neonblue,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15.0,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 const SizedBox(height: 20.0),
@@ -201,7 +220,7 @@ class _HelperDetailsState extends State<HelperDetails> {
                   ),
                 ),
                 const SizedBox(height: 20.0),
-                const ListTile(
+                ListTile(
                   leading: Text(
                     'KYC Document',
                     style: TextStyle(
@@ -209,13 +228,23 @@ class _HelperDetailsState extends State<HelperDetails> {
                       fontSize: 15.0,
                     ),
                   ),
-                  trailing: Text(
-                    'view',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 15.0,
-                      color: AppColors.neonblue,
-                    ),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min, 
+                    children: [
+                      Icon(
+                        PhosphorIcons.eye(PhosphorIconsStyle.regular),
+                        color: AppColors.neonblue,
+                      ),
+                      SizedBox(width: 10.0),
+                      Text(
+                        'view',
+                        style: TextStyle(
+                          color: AppColors.neonblue,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15.0,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],

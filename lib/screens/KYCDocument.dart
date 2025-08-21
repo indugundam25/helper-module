@@ -22,7 +22,6 @@ class _KYCDocumentState extends State<KYCDocument> {
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {
-            // Navigator.pop(context);
             showModalBottomSheet(
               context: context,
               builder: (BuildContext context) {
@@ -71,7 +70,7 @@ class _KYCDocumentState extends State<KYCDocument> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => AddHelper(),
+                                      builder: (context) => AddHelper( service : ''),
                                     ),
                                   );
                                 },
