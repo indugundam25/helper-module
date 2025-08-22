@@ -28,8 +28,15 @@ class _AddHelperState extends State<AddHelper> {
   String service = '';
   String selectedOrg = 'None';
   List<String> selectedLangs = [];
+  String vehicleNumber = 'TS 08 AV 1234';
+  final TextEditingController _vehicleController = TextEditingController();
+  Vehicle selectedVehicle = Vehicle(
+    name: 'Bike',
+    icon: Icon(PhosphorIconsRegular.moped, color: iconColor),
+  );
   File? imageFile;
   final ImagePicker picker = ImagePicker();
+  // Vehicle vehicle = new Vehicle(name: '', icon: null);
   @override
   void initState() {
     super.initState();
@@ -39,6 +46,7 @@ class _AddHelperState extends State<AddHelper> {
   @override
   Widget build(BuildContext context) {
     final helperkey = GlobalKey<FormState>();
+    final _vehicleKey = GlobalKey<FormState>();
     List<String> orgs = [
       'None',
       'Sonic Services',
@@ -344,7 +352,7 @@ class _AddHelperState extends State<AddHelper> {
                             //   }
                             // },
                             decoration: InputDecoration(
-                              labelText: 'Name',
+                              hintText: 'Name',
                               border: OutlineInputBorder(),
                             ),
                           ),
@@ -569,7 +577,7 @@ class _AddHelperState extends State<AddHelper> {
                             //   }
                             // },
                             decoration: InputDecoration(
-                              labelText: 'Phone (Mobile)',
+                              hintText: 'Phone (Mobile)',
                               border: OutlineInputBorder(),
                             ),
                             keyboardType: TextInputType.number,
@@ -603,7 +611,7 @@ class _AddHelperState extends State<AddHelper> {
                               // },
                               decoration: InputDecoration(
                                 border: OutlineInputBorder(),
-                                labelText: 'Email',
+                                hintText: 'Email',
                               ),
                             ),
                           ),
@@ -638,106 +646,164 @@ class _AddHelperState extends State<AddHelper> {
                               showModalBottomSheet(
                                 context: context,
                                 builder: (BuildContext context) {
-                                  return SizedBox(
-                                    height: 350,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(20.0),
-                                      child: Column(
-                                        children: [
-                                          Align(
-                                            alignment: Alignment.centerLeft,
-                                            child: Text(
-                                              'Vehicle Details',
-                                              style: TextStyle(
-                                                fontSize: 20.0,
-                                                fontWeight: FontWeight.w900,
-                                              ),
-                                            ),
-                                          ),
-                                          SizedBox(height: 20.0),
-                                          Align(
-                                            alignment: Alignment.centerLeft,
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.fromLTRB(
-                                                    10.0,
-                                                    0.0,
-                                                    0.0,
-                                                    0.0,
+                                  return StatefulBuilder(
+                                    builder: (context, setModalState) {
+                                      return SizedBox(
+                                        height: 500,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(20.0),
+                                          child: Column(
+                                            children: [
+                                              Align(
+                                                alignment: Alignment.centerLeft,
+                                                child: Text(
+                                                  'Vehicle Details',
+                                                  style: TextStyle(
+                                                    fontSize: 20.0,
+                                                    fontWeight: FontWeight.w900,
                                                   ),
-                                              child: Text(
-                                                'Vehicle Number',
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
                                                 ),
                                               ),
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: TextFormField(
-                                              decoration: InputDecoration(
-                                                hintText: 'TS 08 AV 1234',
-                                                border: OutlineInputBorder(),
-                                              ),
-                                            ),
-                                          ),
-                                          Row(
-                                            children: vehicles.map((vehicle) {
-                                              return Padding(
-                                                padding: const EdgeInsets.all(
-                                                  8.0,
-                                                ),
-                                                child: Column(
-                                                  children: [
-                                                    CircleAvatar(
-                                                      radius: 30.0,
-                                                      backgroundColor:
-                                                          AppColors.neonblue,
-                                                      child: vehicle.icon,
+                                              SizedBox(height: 20.0),
+                                              Align(
+                                                alignment: Alignment.centerLeft,
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.fromLTRB(
+                                                        10.0,
+                                                        0.0,
+                                                        0.0,
+                                                        0.0,
+                                                      ),
+                                                  child: Text(
+                                                    'Vehicle Number',
+                                                    style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
                                                     ),
-                                                    Text(vehicle.name),
-                                                  ],
-                                                ),
-                                              );
-                                            }).toList(),
-                                          ),
-
-                                          SizedBox(height: 20.0),
-                                          ElevatedButton(
-                                            style: ElevatedButton.styleFrom(
-                                              backgroundColor:
-                                                  AppColors.neonblue,
-                                            ),
-                                            onPressed: () {
-                                              Navigator.pop(context);
-                                            },
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.fromLTRB(
-                                                    100.0,
-                                                    0.0,
-                                                    100.0,
-                                                    0.0,
                                                   ),
-                                              child: Text(
-                                                'Save',
-                                                style: TextStyle(
-                                                  color: Colors.white,
                                                 ),
                                               ),
-                                            ),
+                                              Form(
+                                                key: _vehicleKey,
+                                                child: Padding(
+                                                  padding: const EdgeInsets.all(
+                                                    8.0,
+                                                  ),
+                                                  child: TextFormField(
+                                                    validator: (value) {
+                                                      if (value == null ||
+                                                          value.isEmpty) {
+                                                        return 'Enter Vehicle Number';
+                                                      } else {
+                                                        return null;
+                                                      }
+                                                    },
+                                                    controller:
+                                                        _vehicleController,
+                                                    decoration: InputDecoration(
+                                                      hintText: vehicleNumber,
+                                                      border:
+                                                          OutlineInputBorder(),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                              Row(
+                                                children: vehicles.map((
+                                                  vehicle,
+                                                ) {
+                                                  return Padding(
+                                                    padding:
+                                                        const EdgeInsets.fromLTRB(
+                                                          12.0,
+                                                          8.0,
+                                                          12.0,
+                                                          8.0,
+                                                        ),
+                                                    child: Column(
+                                                      children: [
+                                                        GestureDetector(
+                                                          onTap: () {
+                                                            setModalState(() {
+                                                              selectedVehicle
+                                                                      .icon =
+                                                                  vehicle.icon;
+                                                            });
+                                                          },
+                                                          child: CircleAvatar(
+                                                            radius: 30.0,
+                                                            backgroundColor:
+                                                                (selectedVehicle
+                                                                        .icon ==
+                                                                    vehicle
+                                                                        .icon)
+                                                                ? AppColors
+                                                                      .neonblue
+                                                                : Colors.white,
+                                                            child: vehicle.icon,
+                                                          ),
+                                                        ),
+                                                        Text(vehicle.name),
+                                                      ],
+                                                    ),
+                                                  );
+                                                }).toList(),
+                                              ),
+
+                                              SizedBox(height: 150.0),
+                                              ElevatedButton(
+                                                style: ElevatedButton.styleFrom(
+                                                  backgroundColor:
+                                                      AppColors.neonblue,
+                                                ),
+                                                onPressed: () {
+                                                  if (_vehicleKey.currentState!
+                                                      .validate()) {
+                                                    vehicleNumber =
+                                                        _vehicleController.text;
+                                                  }
+                                                  Navigator.pop(context, {
+                                                    'vehicle': selectedVehicle,
+                                                    'vehicleNumber':
+                                                        vehicleNumber,
+                                                  });
+                                                },
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.fromLTRB(
+                                                        100.0,
+                                                        0.0,
+                                                        100.0,
+                                                        0.0,
+                                                      ),
+                                                  child: Text(
+                                                    'Save',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
                                           ),
-                                        ],
-                                      ),
-                                    ),
+                                        ),
+                                      );
+                                    },
                                   );
                                 },
-                              );
+                              ).then((value) {
+                                if (value != null) {
+                                  setState(() {
+                                    selectedVehicle = value['vehicle'];
+                                    vehicleNumber = value['vehicleNumber'];
+                                  });
+                                }
+                              });
                             },
                             decoration: InputDecoration(
-                              prefixIcon: Icon(Icons.pedal_bike_sharp),
-                              hintText: 'TS 08 AB 1234',
+                              prefixIcon: selectedVehicle.icon,
+                              hintText: vehicleNumber,
                               border: OutlineInputBorder(),
                             ),
                           ),

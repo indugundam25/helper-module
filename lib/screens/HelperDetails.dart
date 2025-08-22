@@ -49,11 +49,17 @@ class _HelperDetailsState extends State<HelperDetails> {
                     Positioned(
                       bottom: 10,
                       right: 120,
+                      // child: CircleAvatar(
+                      //   radius: 20,
+                      //   backgroundImage: AssetImage(
+                      //     "assets/images/profile2.webp",
+                      //   ),
+                      // ),
                       child: CircleAvatar(
                         radius: 20,
-                        backgroundImage: AssetImage(
-                          "assets/images/profile2.webp",
-                        ),
+                        backgroundColor: AppColors.accent,
+                        foregroundColor: Colors.white,
+                        child: Icon(Icons.phone, color: AppColors.neonblue),
                       ),
                     ),
                   ],
@@ -82,7 +88,7 @@ class _HelperDetailsState extends State<HelperDetails> {
                     ),
                   ),
                   trailing: Row(
-                    mainAxisSize: MainAxisSize.min, 
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       Icon(
                         PhosphorIcons.eye(PhosphorIconsStyle.regular),
@@ -229,7 +235,7 @@ class _HelperDetailsState extends State<HelperDetails> {
                     ),
                   ),
                   trailing: Row(
-                    mainAxisSize: MainAxisSize.min, 
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       Icon(
                         PhosphorIcons.eye(PhosphorIconsStyle.regular),
