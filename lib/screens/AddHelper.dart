@@ -2,6 +2,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:dotted_border/dotted_border.dart';
+import 'package:flutter/services.dart';
 import 'package:helper_module/screens/HelperList.dart';
 import 'package:helper_module/screens/KYCDocument.dart';
 import 'package:helper_module/screens/ServiceTypes.dart';
@@ -25,7 +26,7 @@ enum Genders { Male, Female, Other }
 
 class _AddHelperState extends State<AddHelper> {
   Genders _gender = Genders.Male;
-  String service = '';
+  String selectedService = '';
   String selectedOrg = 'None';
   List<String> selectedLangs = [];
   String vehicleNumber = 'TS 08 AV 1234';
@@ -36,17 +37,11 @@ class _AddHelperState extends State<AddHelper> {
   );
   File? imageFile;
   final ImagePicker picker = ImagePicker();
-  // Vehicle vehicle = new Vehicle(name: '', icon: null);
-  @override
-  void initState() {
-    super.initState();
-    service = widget.service;
-  }
 
   @override
   Widget build(BuildContext context) {
     final helperkey = GlobalKey<FormState>();
-    final _vehicleKey = GlobalKey<FormState>();
+    final vehicleKey = GlobalKey<FormState>();
     List<String> orgs = [
       'None',
       'Sonic Services',
@@ -177,13 +172,19 @@ class _AddHelperState extends State<AddHelper> {
                           child: GestureDetector(
                             child: TextFormField(
                               readOnly: true,
-                              onTap: () {
-                                Navigator.push(
+                              onTap: () async {
+                                final result = await Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => ServiceTypes(),
                                   ),
                                 );
+
+                                if (result != null && result is String) {
+                                  setState(() {
+                                    selectedService = result;
+                                  });
+                                }
                               },
                               // validator: (value) {
                               //   if (value == null || value.isEmpty) {
@@ -193,11 +194,16 @@ class _AddHelperState extends State<AddHelper> {
                               //   }
                               // },
                               decoration: InputDecoration(
-                                hintText: (service != '')
-                                    ? service
+                                hintText: (selectedService != '')
+                                    ? selectedService
                                     : 'Select type of service',
                                 suffixIcon: Icon(Icons.keyboard_arrow_down),
                                 border: OutlineInputBorder(),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(10.0),
+                                  ),
+                                ),
                               ),
                             ),
                           ),
@@ -321,7 +327,12 @@ class _AddHelperState extends State<AddHelper> {
                                   ? selectedOrg
                                   : 'Organization',
                               suffixIcon: const Icon(Icons.keyboard_arrow_down),
-                              border: const OutlineInputBorder(),
+                              border: OutlineInputBorder(),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(10.0),
+                                ),
+                              ),
                             ),
                           ),
                         ),
@@ -344,16 +355,27 @@ class _AddHelperState extends State<AddHelper> {
                             horizontal: 30.0,
                           ),
                           child: TextFormField(
-                            // validator: (value) {
-                            //   if (value == null || value.isEmpty) {
-                            //     return 'Enter name';
-                            //   } else {
-                            //     return null;
-                            //   }
-                            // },
+                            autovalidateMode: AutovalidateMode.onUnfocus,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.allow(
+                                RegExp('[a-z]'),
+                              ),
+                            ],
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Name is required';
+                              } else {
+                                return null;
+                              }
+                            },
                             decoration: InputDecoration(
                               hintText: 'Name',
                               border: OutlineInputBorder(),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(10.0),
+                                ),
+                              ),
                             ),
                           ),
                         ),
@@ -547,6 +569,11 @@ class _AddHelperState extends State<AddHelper> {
                                   : 'Select languages',
                               suffixIcon: const Icon(Icons.keyboard_arrow_down),
                               border: const OutlineInputBorder(),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(10.0),
+                                ),
+                              ),
                             ),
                           ),
                         ),
@@ -569,18 +596,41 @@ class _AddHelperState extends State<AddHelper> {
                             horizontal: 30.0,
                           ),
                           child: TextFormField(
-                            // validator: (value) {
-                            //   if (value == null || value.isEmpty) {
-                            //     return 'Enter Phone number';
-                            //   } else {
-                            //     return null;
-                            //   }
-                            // },
+                            inputFormatters: [
+                              LengthLimitingTextInputFormatter(10),
+                            ],
+                            autovalidateMode: AutovalidateMode.onUnfocus,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Enter Phone number';
+                              } else if (value.length < 10) {
+                                return 'Phone number must contain 10 digits';
+                              } else {
+                                return null;
+                              }
+                            },
+                            keyboardType: TextInputType.phone,
                             decoration: InputDecoration(
                               hintText: 'Phone (Mobile)',
-                              border: OutlineInputBorder(),
+                              border: const OutlineInputBorder(),
+                              prefixIcon: Padding(
+                                padding: const EdgeInsets.only(
+                                  left: 8,
+                                  right: 8,
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(PhosphorIcons.caretDown()),
+                                    const SizedBox(width: 4),
+                                    const Text(
+                                      '+91',
+                                      style: TextStyle(fontSize: 16),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
-                            keyboardType: TextInputType.number,
                           ),
                         ),
                         Padding(
@@ -602,15 +652,25 @@ class _AddHelperState extends State<AddHelper> {
                           ),
                           child: SizedBox(
                             child: TextFormField(
-                              // validator: (value) {
-                              //   if (value == null || value.isEmpty) {
-                              //     return 'Enter Email';
-                              //   } else {
-                              //     return null;
-                              //   }
-                              // },
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Email is required';
+                                } else if (!RegExp(
+                                  r'^[a-zA-Z0-9._%+-]+@gmail\.com$',
+                                ).hasMatch(value)) {
+                                  return 'Enter a valid email address';
+                                } else {
+                                  return null;
+                                }
+                              },
+                              autovalidateMode: AutovalidateMode.onUnfocus,
                               decoration: InputDecoration(
                                 border: OutlineInputBorder(),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(10.0),
+                                  ),
+                                ),
                                 hintText: 'Email',
                               ),
                             ),
@@ -685,7 +745,7 @@ class _AddHelperState extends State<AddHelper> {
                                                 ),
                                               ),
                                               Form(
-                                                key: _vehicleKey,
+                                                key: vehicleKey,
                                                 child: Padding(
                                                   padding: const EdgeInsets.all(
                                                     8.0,
@@ -705,6 +765,15 @@ class _AddHelperState extends State<AddHelper> {
                                                       hintText: vehicleNumber,
                                                       border:
                                                           OutlineInputBorder(),
+                                                      enabledBorder:
+                                                          OutlineInputBorder(
+                                                            borderRadius:
+                                                                BorderRadius.all(
+                                                                  Radius.circular(
+                                                                    10.0,
+                                                                  ),
+                                                                ),
+                                                          ),
                                                     ),
                                                   ),
                                                 ),
@@ -758,7 +827,7 @@ class _AddHelperState extends State<AddHelper> {
                                                       AppColors.neonblue,
                                                 ),
                                                 onPressed: () {
-                                                  if (_vehicleKey.currentState!
+                                                  if (vehicleKey.currentState!
                                                       .validate()) {
                                                     vehicleNumber =
                                                         _vehicleController.text;
@@ -805,6 +874,11 @@ class _AddHelperState extends State<AddHelper> {
                               prefixIcon: selectedVehicle.icon,
                               hintText: vehicleNumber,
                               border: OutlineInputBorder(),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(10.0),
+                                ),
+                              ),
                             ),
                           ),
                         ),

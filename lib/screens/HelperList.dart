@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:helper_module/screens/AddHelper.dart';
 import 'package:helper_module/screens/HelperDetails.dart';
 import 'package:helper_module/constants/app_colors.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class HelperList extends StatefulWidget {
   const HelperList({super.key});
@@ -53,11 +54,11 @@ class _HelperListState extends State<HelperList> {
             child: Padding(
               padding: const EdgeInsets.all(10.0),
               child: ListView.separated(
-                itemCount: helpers.length, 
+                itemCount: helpers.length,
                 separatorBuilder: (context, index) => const Divider(
                   height: 10.0,
                   thickness: 1.0,
-                  color: Color(0xFFDEDEDE), 
+                  color: Color(0xFFDEDEDE),
                 ),
                 itemBuilder: (context, index) {
                   final helper = helpers[index];
@@ -66,7 +67,10 @@ class _HelperListState extends State<HelperList> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => HelperDetails(name : helper["name"], role : helper["role"]),
+                          builder: (context) => HelperDetails(
+                            name: helper["name"],
+                            role: helper["role"],
+                          ),
                         ),
                       );
                     },
@@ -92,9 +96,10 @@ class _HelperListState extends State<HelperList> {
                     trailing: CircleAvatar(
                       backgroundColor: AppColors.accent,
                       child: IconButton(
-                        onPressed: () {
-                        },
-                        icon: const Icon(Icons.phone),
+                        onPressed: () {},
+                        icon: Icon(
+                          PhosphorIcons.phone(PhosphorIconsStyle.fill),
+                        ),
                         color: AppColors.neonblue,
                       ),
                     ),
@@ -114,7 +119,9 @@ class _HelperListState extends State<HelperList> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => AddHelper( service: '',)),
+                  MaterialPageRoute(
+                    builder: (context) => AddHelper(service: ''),
+                  ),
                 );
               },
               child: Row(

@@ -44,17 +44,22 @@ class _DocumentTypeState extends State<DocumentType> {
             Expanded(
               child: ListView.separated(
                 itemBuilder: (BuildContext context, int index) {
-                  final doc = doctypes[index];
+                  String doctype = doctypes[index];
                   return ListTile(
-                    trailing: Icon(
-                      Icons.check_circle,
-                      color: AppColors.neonblue,
-                    ),
+                    // trailing: Icon(
+                    //   Icons.check_circle,
+                    //   color: AppColors.neonblue,
+                    // ),
+                    // trailing: doctype == 'Aadhar card'
+                    //     ? const Icon(
+                    //         Icons.check_circle,
+                    //         color: AppColors.neonblue,
+                    //       )
+                    //     : null,
                     onTap: () {
-                      // selected = true;
-                      Navigator.pop(context, doc);
+                      Navigator.pop(context, doctype);
                     },
-                    title: Text(doc),
+                    title: Text(doctype),
                   );
                 },
                 separatorBuilder: (BuildContext context, int index) =>

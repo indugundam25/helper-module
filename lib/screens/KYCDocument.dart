@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -16,6 +14,7 @@ class KYCDocument extends StatefulWidget {
 }
 
 class _KYCDocumentState extends State<KYCDocument> {
+  String selectedDocType = '';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -70,7 +69,8 @@ class _KYCDocumentState extends State<KYCDocument> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => AddHelper( service : ''),
+                                      builder: (context) =>
+                                          AddHelper(service: ''),
                                     ),
                                   );
                                 },
@@ -105,12 +105,22 @@ class _KYCDocumentState extends State<KYCDocument> {
             Text('Document Type'),
             SizedBox(height: 7.0),
             TextFormField(
-              onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context)=> DocumentType()));
+              onTap: () async {
+                final docType = await Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => DocumentType()),
+                );
+                if (docType != null && docType is String) {
+                  setState(() {
+                    selectedDocType = docType;
+                  });
+                }
               },
               readOnly: true,
               decoration: InputDecoration(
-                hintText: 'Aadhar card',
+                hintText: (selectedDocType != '')
+                    ? selectedDocType
+                    : 'Aadhar card',
                 suffixIcon: Icon(
                   PhosphorIcons.caretDown(PhosphorIconsStyle.regular),
                 ),
@@ -157,16 +167,16 @@ class _KYCDocumentState extends State<KYCDocument> {
             SizedBox(height: 20.0),
             ListTile(
               leading: Stack(
-                alignment: Alignment.center, 
+                alignment: Alignment.center,
                 children: [
                   SvgPicture.asset(
-                    'assets/images/file_color.svg', 
+                    'assets/images/file_color.svg',
                     width: 30.0,
                     height: 40.0,
                     fit: BoxFit.cover,
                   ),
                   SvgPicture.asset(
-                    'assets/images/jpg.svg', 
+                    'assets/images/jpg.svg',
                     alignment: Alignment.bottomCenter,
                     width: 7.0,
                     height: 7.0,
@@ -176,12 +186,17 @@ class _KYCDocumentState extends State<KYCDocument> {
 
               title: Text('87654dfghvgf'),
               subtitle: Text('1.5 MB'),
-              trailing: Icon(PhosphorIcons.trash(PhosphorIconsStyle.regular), color: Colors.red,),
+              trailing: Icon(
+                PhosphorIcons.trash(PhosphorIconsStyle.regular),
+                color: Colors.red,
+              ),
             ),
             SizedBox(height: 280.0),
 
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pop(context);
+              },
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
                 padding: const EdgeInsets.symmetric(vertical: 15),

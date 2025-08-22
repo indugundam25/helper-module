@@ -59,7 +59,10 @@ class _HelperDetailsState extends State<HelperDetails> {
                         radius: 20,
                         backgroundColor: AppColors.accent,
                         foregroundColor: Colors.white,
-                        child: Icon(Icons.phone, color: AppColors.neonblue),
+                        child: Icon(
+                          PhosphorIcons.phone(PhosphorIconsStyle.fill),
+                          color: AppColors.neonblue,
+                        ),
                       ),
                     ),
                   ],
