@@ -3,6 +3,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:helper_module/screens/HelperList.dart';
 import 'package:helper_module/screens/KYCDocument.dart';
 import 'package:helper_module/screens/ServiceTypes.dart';
@@ -30,13 +31,18 @@ class _AddHelperState extends State<AddHelper> {
   String selectedOrg = 'None';
   List<String> selectedLangs = [];
   String vehicleNumber = 'TS 08 AV 1234';
-  final TextEditingController _vehicleController = TextEditingController();
   Vehicle selectedVehicle = Vehicle(
     name: 'Bike',
     icon: Icon(PhosphorIconsRegular.moped, color: iconColor),
   );
   File? imageFile;
   final ImagePicker picker = ImagePicker();
+  Map<String, String>? kycDoc;
+
+  final TextEditingController _vehicleController = TextEditingController();
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -73,6 +79,7 @@ class _AddHelperState extends State<AddHelper> {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
+          centerTitle: false,
           leading: IconButton(
             onPressed: () {
               Navigator.push(
@@ -229,7 +236,7 @@ class _AddHelperState extends State<AddHelper> {
                           child: TextFormField(
                             // validator: (value) {
                             //   if (value == null || value.isEmpty) {
-                            //     return 'Enter name';
+                            //     return 'select organization';
                             //   } else {
                             //     return null;
                             //   }
@@ -355,6 +362,7 @@ class _AddHelperState extends State<AddHelper> {
                             horizontal: 30.0,
                           ),
                           child: TextFormField(
+                            controller: nameController,
                             autovalidateMode: AutovalidateMode.onUnfocus,
                             inputFormatters: [
                               FilteringTextInputFormatter.allow(
@@ -596,6 +604,7 @@ class _AddHelperState extends State<AddHelper> {
                             horizontal: 30.0,
                           ),
                           child: TextFormField(
+                            controller: phoneController,
                             inputFormatters: [
                               LengthLimitingTextInputFormatter(10),
                             ],
@@ -611,25 +620,22 @@ class _AddHelperState extends State<AddHelper> {
                             },
                             keyboardType: TextInputType.phone,
                             decoration: InputDecoration(
+                              prefixIcon: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const SizedBox(width: 8),
+                                  Icon(PhosphorIcons.caretDown()),
+                                  const SizedBox(width: 4),
+                                  const Text('+91'),
+                                  const SizedBox(width: 8),
+                                ],
+                              ),
+                              prefixIconConstraints: const BoxConstraints(
+                                minWidth: 0,
+                                minHeight: 0,
+                              ),
                               hintText: 'Phone (Mobile)',
                               border: const OutlineInputBorder(),
-                              prefixIcon: Padding(
-                                padding: const EdgeInsets.only(
-                                  left: 8,
-                                  right: 8,
-                                ),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Icon(PhosphorIcons.caretDown()),
-                                    const SizedBox(width: 4),
-                                    const Text(
-                                      '+91',
-                                      style: TextStyle(fontSize: 16),
-                                    ),
-                                  ],
-                                ),
-                              ),
                             ),
                           ),
                         ),
@@ -652,6 +658,7 @@ class _AddHelperState extends State<AddHelper> {
                           ),
                           child: SizedBox(
                             child: TextFormField(
+                              controller: emailController,
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
                                   return 'Email is required';
@@ -884,45 +891,87 @@ class _AddHelperState extends State<AddHelper> {
                         ),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: ListTile(
-                            leading: Text(
-                              'KYC Document',
-                              style: TextStyle(
-                                fontSize: 15.0,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: 'Nunito Sans',
-                                color: Colors.black,
-                              ),
-                            ),
-                            trailing: ElevatedButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => KYCDocument(),
-                                  ),
-                                );
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: null,
-                                foregroundColor: Colors.black,
-                              ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Icon(Icons.add, size: 20.0),
-                                  SizedBox(width: 8.0),
-                                  Text(
-                                    'Add Document',
+                          child: (kycDoc == null)
+                              ? ListTile(
+                                  leading: Text(
+                                    'KYC Document',
                                     style: TextStyle(
-                                      fontFamily: 'Nunito Sans',
+                                      fontSize: 15.0,
                                       fontWeight: FontWeight.bold,
+                                      fontFamily: 'Nunito Sans',
+                                      color: Colors.black,
                                     ),
                                   ),
-                                ],
-                              ),
-                            ),
-                          ),
+                                  trailing: ElevatedButton(
+                                    onPressed: () async {
+                                      final result = await Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              const KYCDocument(),
+                                        ),
+                                      );
+                                      if (result != null &&
+                                          result is Map<String, String>) {
+                                        setState(() {
+                                          kycDoc = result;
+                                        });
+                                      }
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: null,
+                                      foregroundColor: Colors.black,
+                                    ),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: const [
+                                        Icon(Icons.add, size: 20.0),
+                                        SizedBox(width: 8.0),
+                                        Text(
+                                          'Add Document',
+                                          style: TextStyle(
+                                            fontFamily: 'Nunito Sans',
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                )
+                              : ListTile(
+                                  leading: Stack(
+                                    alignment: Alignment.center,
+                                    children: [
+                                      SvgPicture.asset(
+                                        'assets/images/file_color.svg',
+                                        width: 30.0,
+                                        height: 40.0,
+                                        fit: BoxFit.cover,
+                                      ),
+                                      SvgPicture.asset(
+                                        'assets/images/jpg.svg',
+                                        alignment: Alignment.bottomCenter,
+                                        width: 7.0,
+                                        height: 7.0,
+                                      ),
+                                    ],
+                                  ),
+                                  title: Text(kycDoc!['type'] ?? 'Unknown'),
+                                  subtitle: Text(kycDoc!['size'] ?? ''),
+                                  trailing: GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        kycDoc = null;
+                                      });
+                                    },
+                                    child: Icon(
+                                      PhosphorIcons.trash(
+                                        PhosphorIconsStyle.regular,
+                                      ),
+                                      color: Colors.red,
+                                    ),
+                                  ),
+                                ),
                         ),
                       ],
                     ),

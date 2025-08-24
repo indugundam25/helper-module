@@ -15,10 +15,13 @@ class KYCDocument extends StatefulWidget {
 
 class _KYCDocumentState extends State<KYCDocument> {
   String selectedDocType = '';
+  String fileSize = '1.5 MB';
+  // bool isDocSelected = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: false,
         leading: IconButton(
           onPressed: () {
             showModalBottomSheet(
@@ -185,17 +188,23 @@ class _KYCDocumentState extends State<KYCDocument> {
               ),
 
               title: Text('87654dfghvgf'),
-              subtitle: Text('1.5 MB'),
-              trailing: Icon(
-                PhosphorIcons.trash(PhosphorIconsStyle.regular),
-                color: Colors.red,
+              subtitle: Text(fileSize),
+              trailing: GestureDetector(
+                onTap: () {},
+                child: Icon(
+                  PhosphorIcons.trash(PhosphorIconsStyle.regular),
+                  color: Colors.red,
+                ),
               ),
             ),
             SizedBox(height: 280.0),
 
             ElevatedButton(
               onPressed: () {
-                Navigator.pop(context);
+                Navigator.pop(context, {
+                  'type': selectedDocType,
+                  'size': fileSize,
+                });
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,

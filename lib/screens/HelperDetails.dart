@@ -25,6 +25,7 @@ class _HelperDetailsState extends State<HelperDetails> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: false,
         leading: IconButton(
           icon: const Icon(Icons.chevron_left),
           onPressed: () {
@@ -49,12 +50,6 @@ class _HelperDetailsState extends State<HelperDetails> {
                     Positioned(
                       bottom: 10,
                       right: 120,
-                      // child: CircleAvatar(
-                      //   radius: 20,
-                      //   backgroundImage: AssetImage(
-                      //     "assets/images/profile2.webp",
-                      //   ),
-                      // ),
                       child: CircleAvatar(
                         radius: 20,
                         backgroundColor: AppColors.accent,

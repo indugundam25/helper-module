@@ -24,12 +24,36 @@ class _HelperListState extends State<HelperList> {
     {"name": "Rashi", "role": "Caretaker"},
   ];
 
+  List<Map<String, String>> filteredHelpers = [];
+
+  @override
+  void initState() {
+    super.initState();
+    filteredHelpers = helpers;
+  }
+
+  void _filterHelpers(String query) {
+    setState(() {
+      if (query.isEmpty) {
+        filteredHelpers = helpers;
+      } else {
+        filteredHelpers = helpers.where((helper) {
+          final name = helper["name"]!.toLowerCase();
+          final role = helper["role"]!.toLowerCase();
+          final search = query.toLowerCase();
+          return name.contains(search) || role.contains(search);
+        }).toList();
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: false,
         leading: IconButton(
-          onPressed: () {},
+          onPressed: () => Navigator.pop(context),
           icon: const Icon(Icons.chevron_left),
         ),
         title: const Text("Helpers"),
@@ -40,9 +64,10 @@ class _HelperListState extends State<HelperList> {
           Padding(
             padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
             child: TextField(
+              onChanged: _filterHelpers,
               decoration: InputDecoration(
                 prefixIcon: const Icon(Icons.search),
-                hintText: 'Search for helpers',
+                hintText: 'Search by name or role',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
@@ -54,14 +79,14 @@ class _HelperListState extends State<HelperList> {
             child: Padding(
               padding: const EdgeInsets.all(10.0),
               child: ListView.separated(
-                itemCount: helpers.length,
+                itemCount: filteredHelpers.length,
                 separatorBuilder: (context, index) => const Divider(
                   height: 10.0,
                   thickness: 1.0,
                   color: Color(0xFFDEDEDE),
                 ),
                 itemBuilder: (context, index) {
-                  final helper = helpers[index];
+                  final helper = filteredHelpers[index];
                   return ListTile(
                     onTap: () {
                       Navigator.push(

@@ -14,6 +14,7 @@ class _EditHelperState extends State<EditHelper> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: false,
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context);
